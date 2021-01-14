@@ -4,10 +4,12 @@ import com.web.cloud.entities.CommonResult;
 import com.web.cloud.entities.Payment;
 
 
+import com.web.cloud.enums.Code;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -29,6 +31,16 @@ public class OrderController {
     @GetMapping("/payment/{id}")
     public CommonResult<Payment> getPaymentById(@PathVariable("id") Long id) {
         return restTemplate.getForObject(url + "/payment/getPayment/" + id, CommonResult.class);
+    }
+
+    @GetMapping("/paymentEntity/{id}")
+    public CommonResult<Payment> getPaymentByIdForEntity(@PathVariable("id") Long id) {
+        ;
+        ResponseEntity<CommonResult> forEntity = restTemplate.getForEntity(url + "/payment/getPayment/" + id, CommonResult.class);
+        if (forEntity.getStatusCode().is2xxSuccessful()) {
+            return forEntity.getBody();
+        }
+        return new CommonResult<>(Code.ERROR.value(),"操作失败");
     }
 
     @PostMapping("/createPayment")

@@ -1,5 +1,6 @@
 package com.web.cloud.entities;
 
+import com.web.cloud.enums.Code;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,6 +21,12 @@ public class CommonResult<T> implements Serializable {
     public CommonResult(Integer code, String message) {
         this.code = code;
         this.message = message;
+        this.data = null;
+    }
+
+    public CommonResult(T data) {
+        this.code = Code.SUCCESS.value();
+        this.message = "成功";
         this.data = null;
     }
 
